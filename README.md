@@ -4,7 +4,7 @@
 ![Downloads](https://flat.badgen.net/packagist/dt/bnomei/kirby3-staticache?color=272822)
 [![Twitter](https://flat.badgen.net/badge/twitter/bnomei?color=66d9ef)](https://twitter.com/bnomei)
 
-Kirby 3 Plugin to view recently modified pages by current User
+Kirby 3 plugin to cache html output statically on demand
 
 ## Commercial Usage
 
