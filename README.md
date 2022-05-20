@@ -81,7 +81,7 @@ Add these lines before your kirby render method. Please note that using one of t
     $staticache = __DIR__ . '/static/' . $_SERVER['REQUEST_URI'] . '/index.html';
     if (file_exists($staticache)) {
         echo file_get_contents($staticache);
-        die;
+        die();
     }
 
     require __DIR__ . '/kirby/bootstrap.php';
