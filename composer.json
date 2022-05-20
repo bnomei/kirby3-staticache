@@ -1,21 +1,64 @@
 {
-  "name": "getkirby/staticache",
-  "description": "Static site performance on demand",
-  "type": "kirby-plugin",
-  "license": "MIT",
-  "homepage": "https://getkirby.com/plugins/getkirby/staticache",
-  "version": "0.1.0",
-  "authors": [
-    {
-      "name": "Bastian Allgeier",
-      "email": "bastian@getkirby.com",
-      "homepage": "https://getkirby.com/plugins/getkirby"
+    "name": "bnomei/kirby3-staticache",
+    "description": "Kirby 3 plugin to cache html output statically on demand",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "homepage": "https://getkirby.com/plugins/getkirby/staticache",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Bruno Meilick",
+            "email": "b@bnomei.com"
+        }
+    ],
+    "keywords": [
+        "kirby3",
+        "kirby3-cms",
+        "kirby3-plugin",
+        "static",
+        "cache",
+        "html",
+        "pages",
+        "ssg",
+        "static-site-generator"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bnomei\\": "classes/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        }
+    },
+    "require": {
+        "php": ">=7.4.0",
+        "getkirby/composer-installer": "^1.1"
+    },
+    "require-dev": {
+        "getkirby/cms": "^3.5",
+        "php-coveralls/php-coveralls": "^2.4",
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "analyze": "phpstan analyse classes",
+        "fix": "php-cs-fixer fix",
+        "test": [
+            "mkdir -p tests/logs",
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --configuration ./phpunit.xml"
+        ],
+        "dist": [
+            "composer install --no-dev --optimize-autoloader",
+            "git rm -rf --cached .; git add .;"
+        ]
+    },
+    "extra": {
+        "kirby-cms-path": "tests/kirby"
+    },
+    "suggest": {
+        "bnomei/kirby3-feeds": "Adds a xml sitemap which will be automatically be included in the robots.txt"
     }
-  ],
-  "require": {
-    "getkirby/composer-installer": "^1.2"
-  },
-  "extra": {
-    "installer-name": "staticache"
-  }
 }

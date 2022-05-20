@@ -1,72 +1,55 @@
-# Kirby Staticache Plugin
+# Kirby3 Staticache
 
-Static site performance on demand!
+![Release](https://flat.badgen.net/packagist/v/bnomei/kirby3-staticache?color=ae81ff)
+![Downloads](https://flat.badgen.net/packagist/dt/bnomei/kirby3-staticache?color=272822)
+[![Twitter](https://flat.badgen.net/badge/twitter/bnomei?color=66d9ef)](https://twitter.com/bnomei)
 
-This plugin will give you the performance of a static site generator for your regular Kirby installations. Without a huge setup or complex deploy steps, you can just run your Kirby site on any server – cheap shared hosting, VPS, you name it – and switch on the static cache to get incredible speed on demand. 
+Kirby 3 Plugin to view recently modified pages by current User
 
-With custom ignore rules, you can even mix static and dynamic content. Keep some pages static while others are still served live by Kirby. 
+## Commercial Usage
 
-The static cache will automatically be flushed whenever content gets updated in the Panel. It's truly the best of both worlds. 
+> <br>
+> <b>Support open source!</b><br><br>
+> This plugin is free but if you use it in a commercial project please consider to sponsor me or make a donation.<br>
+> If my work helped you to make some cash it seems fair to me that I might get a little reward as well, right?<br><br>
+> Be kind. Share a little. Thanks.<br><br>
+> &dash; Bruno<br>
+> &nbsp; 
 
-Rough benchmark comparison for our starterkit home page: 
-
-Without page cache: ~70 ms  
-With page cache: ~30 ms   
-With static cache: ~10 ms
-
-## 🚨 Experimental
-
-This plugin is still an experiment. The first results are very promising but it needs to be tested on more servers and has a couple open todos:
-
-- [ ] Nginx config example
-- [ ] Caddy config example
-- [x] Publish on Packagist to be installable via composer
-- [x] Hooks to automatically flush the cache when content is updated via the Panel
-- [x] Add options to ignore pages from caching
+| M | O | N | E | Y |
+|---|----|---|---|---|
+| [Github sponsor](https://github.com/sponsors/bnomei) | [Patreon](https://patreon.com/bnomei) | [Buy Me a Coffee](https://buymeacoff.ee/bnomei) | [Paypal dontation](https://www.paypal.me/bnomei/15) | [Hire me](mailto:b@bnomei.com?subject=Kirby) |
 
 ## Installation
 
-### Download
+- unzip [master.zip](https://github.com/bnomei/kirby3-staticache/archive/master.zip) as folder `site/plugins/kirby3-staticache` or
+- `git submodule add https://github.com/bnomei/kirby3-staticache.git site/plugins/kirby3-staticache` or
+- `composer require bnomei/kirby3-staticache`
 
-Download and copy this repository to `/site/plugins/staticache`.
-
-### Composer
-
-```
-composer require getkirby/staticache
-```
-
-### Git submodule
-
-```
-git submodule add https://github.com/getkirby/staticache.git site/plugins/staticache
-```
 
 ## Setup
 
 ### Cache configuration
 
-Staticache is just a cache driver that can be activated for the page cache:
+Staticache is a cache driver that can be activated for the page cache:
 
+**site/config/config.php**
 ```php
-// /site/config/config.php
-
 return [
   'cache' => [
     'pages' => [
       'active' => true,
       'type' => 'static'
     ]
-  ]
+  ],
+  // other options
 ];
 ```
 
-You can also use the cache ignore rules to skip pages that should not be cached:
-https://getkirby.com/docs/guide/cache#caching-pages
+You can also use the cache [ignore rules](https://getkirby.com/docs/guide/cache#caching-pages) to skip pages that should not be cached.
 
+**site/config/config.php**
 ```php
-// /site/config/config.php
-
 return [
   'cache' => [
     'pages' => [
@@ -76,9 +59,11 @@ return [
         return $page->template()->name() === 'blog';
       }
     ]
-  ]
+  ],
+  // other options
 ];
 ```
+### Cache duration
 
 Kirby will automatically purge the cache when changes are made in the Panel.
 
@@ -100,7 +85,7 @@ Standard php nginx config will have this location block for all requests
         try_files $uri $uri/ /index.php?$query_string;
     }
 ```
-change it to add `/static/$uri/index.html` before last `/index.php` fallback
+change it to add `/static/$uri/index.html` before last `/index.php` fallback.
 
 ```
     location / {
@@ -108,11 +93,40 @@ change it to add `/static/$uri/index.html` before last `/index.php` fallback
     }
 ```
 
+### pure PHP
+
+Add these two lines before your kirby render method. Please note that using one of the server config rules will still be faster (and safer).
+
+**index.php**
+```php
+<?php
+    require __DIR__ . '/kirby/bootstrap.php';
+
+    // static cache
+    require_once __DIR__ . '/site/plugins/kirby3-staticache/index.php';
+    staticache(__DIR__ . '/static');
+    
+    echo (new Kirby)->render();
+```
+
+## Settings
+
+| bnomei.staticache. | Default           | Description                  |            
+|--------------------|-------------------|------------------------------|
+| root               | `function(){...}` | callback to set the root     |
+| message            | `function(){...}` | callback to return a message |
+
+## Disclaimer
+
+This plugin is provided "as is" with no guarantee. Use it at your own risk and always test it yourself before using it in a production environment. If you find any issues, please [create a new issue](https://github.com/bnomei/kirby3-recently-modified/issues/new).
 
 ## License
 
-MIT
+[MIT](https://opensource.org/licenses/MIT)
+
+It is discouraged to use this plugin in any project that promotes racism, sexism, homophobia, animal abuse, violence or any other form of hate speech.
 
 ## Credits
 
-- [Bastian Allgeier](https://getkirby.com/plugins/getkirby)
+- based on the idea by [Bastian Allgeier](https://getkirby.com/plugins/getkirby)
+- extended version by [Bruno Meilick](https://getkirby.com/plugins/bnomei)
