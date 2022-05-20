@@ -83,7 +83,7 @@ Add these lines before your kirby render method. Please note that using one of t
     if (!empty($_SERVER['REQUEST_URI'])) {
         $staticache .= $_SERVER['REQUEST_URI'] . '/';
     }
-    $staticache = 'index.html';
+    $staticache .= 'index.html';
     if (file_exists($staticache)) {
         echo file_get_contents($staticache);
         die();
