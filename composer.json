@@ -1,10 +1,10 @@
 {
     "name": "bnomei/kirby3-staticache",
-    "description": "Kirby 3 plugin to cache html output statically on demand",
+    "description": "Kirby 3 plugin to cache html output statically on demand with headers",
     "type": "kirby-plugin",
     "license": "MIT",
     "homepage": "https://getkirby.com/plugins/getkirby/staticache",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "authors": [
         {
             "name": "Bruno Meilick",
@@ -20,7 +20,9 @@
         "html",
         "pages",
         "ssg",
-        "static-site-generator"
+        "static-site-generator",
+        "header",
+        "csp"
     ],
     "autoload": {
         "psr-4": {

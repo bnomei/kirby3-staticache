@@ -53,7 +53,12 @@ class StatiCache extends FileCache
 
     public function set(string $key, $value, int $minutes = 0): bool
     {
-        return F::write($this->file($key), $value['html'] . $this->message());
+        $file = $this->file($key);
+        $headers = headers_list();
+        if (!empty($headers)) {
+            file_put_contents($file . '.json', json_encode($headers));
+        }
+        return F::write($file, $value['html'] . $this->message());
     }
 
     protected function message()

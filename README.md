@@ -4,7 +4,7 @@
 ![Downloads](https://flat.badgen.net/packagist/dt/bnomei/kirby3-staticache?color=272822)
 [![Twitter](https://flat.badgen.net/badge/twitter/bnomei?color=66d9ef)](https://twitter.com/bnomei)
 
-Kirby 3 plugin to cache html output statically on demand
+Kirby 3 plugin to cache html output statically on demand with headers
 
 ## Commercial Usage
 
@@ -31,7 +31,7 @@ Kirby 3 plugin to cache html output statically on demand
 
 ### Cache configuration
 
-Staticache is a cache driver that can be activated for the page cache:
+Staticache is a cache driver that can be activated for the page cache.
 
 **site/config/config.php**
 ```php
@@ -69,24 +69,28 @@ Kirby will automatically purge the cache when changes are made in the Panel.
 
 ## Setup Server
 
-You can use any of these ways to make the static cache load.
+You can use any of the following ways to make the static cache load. Using one of the native server config rules will be a tiny bit faster than PHP. But if you need to preserve the headers sent using PHP is the only easy way to do it.
 
 ### PHP
 
-Add these lines before your kirby render method. Please note that using one of the native server config rules will be a tiny bit faster (and safer).
+Add these lines before your kirby render method. 
 
 **index.php**
 ```php
 <?php
-    // load static cache file if it exists
-    $staticache = __DIR__ . '/static/';
-    if (!empty($_SERVER['REQUEST_URI'])) {
-        $staticache .= $_SERVER['REQUEST_URI'] . '/';
+    // static cache file
+    $staticache = __DIR__ . '/static/' . (
+        !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] . '/' : ''
+    ) . 'index.html';
+    // load static cache headers
+    if (file_exists($staticache) && file_exists($staticache . '.json')) {
+        foreach (json_decode(file_get_contents($staticache . '.json'), true) as $header) {
+            header($header);
+        }
     }
-    $staticache .= 'index.html';
+    // load static cache html
     if (file_exists($staticache)) {
-        echo file_get_contents($staticache);
-        die();
+        die(file_get_contents($staticache));
     }
 
     require __DIR__ . '/kirby/bootstrap.php';
@@ -125,7 +129,7 @@ change it to add `/static/$uri/index.html` before last `/index.php` fallback.
 | bnomei.staticache. | Default           | Description                  |            
 |--------------------|-------------------|------------------------------|
 | root               | `function(){...}` | callback to set the root     |
-| message            | `function(){...}` | callback to return a message |
+| message            | `function(){...}` | callback to return a message appended to html output |
 
 ## Disclaimer
 
