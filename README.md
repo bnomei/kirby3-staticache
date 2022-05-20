@@ -80,7 +80,7 @@ If you installed the plugin with composer you can use a helper method called `st
 <?php    
     require __DIR__ . '/kirby/bootstrap.php';
 
-    staticache(__DIR__ . '/static/');
+    staticache(__DIR__ . '/static');
     
     echo (new Kirby)->render();
 ```

@@ -4,7 +4,7 @@ if (!function_exists('staticache')) {
     function staticache(string $dir)
     {
         // static cache file
-        $staticache = $dir . (
+        $staticache = rtrim($dir, '/') . '/' (
             !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] . '/' : ''
         ) . 'index.html';
         // load static cache headers
