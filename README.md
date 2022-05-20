@@ -27,7 +27,7 @@ Kirby 3 plugin to cache html output statically on demand
 - `composer require bnomei/kirby3-staticache`
 
 
-## Setup
+## Setup Cache
 
 ### Cache configuration
 
@@ -67,7 +67,29 @@ return [
 
 Kirby will automatically purge the cache when changes are made in the Panel.
 
-### htaccess rules
+## Setup Server
+
+You can use any of these ways to make the static cache load.
+
+### PHP
+
+Add these lines before your kirby render method. Please note that using one of the native server config rules will be a tiny bit faster (and safer).
+
+**index.php**
+```php
+<?php
+    $staticache = F::read(__DIR__ . '/static/' . $_SERVER['REQUEST_URI'] . '/index.html')
+    if (file_exists($staticache)) {
+        echo file_get_contents($staticache);
+        die;
+    }
+
+    require __DIR__ . '/kirby/bootstrap.php';
+    
+    echo (new Kirby)->render();
+```
+
+### Apache htaccess rules
 
 Add the following lines to your Kirby htaccess file, directly after the RewriteBase rule.
 
@@ -76,7 +98,7 @@ RewriteCond %{DOCUMENT_ROOT}/static/%{REQUEST_URI}/index.html -f [NC]
 RewriteRule ^(.*) %{DOCUMENT_ROOT}/static/%{REQUEST_URI}/index.html [L]
 ```
 
-### nginx
+### Nginx
 
 Standard php nginx config will have this location block for all requests
 
@@ -91,22 +113,6 @@ change it to add `/static/$uri/index.html` before last `/index.php` fallback.
     location / {
         try_files $uri $uri/ /static/$uri/index.html /index.php?$query_string;
     }
-```
-
-### pure PHP
-
-Add these two lines before your kirby render method. Please note that using one of the server config rules will still be faster (and safer).
-
-**index.php**
-```php
-<?php
-    require __DIR__ . '/kirby/bootstrap.php';
-
-    // static cache
-    require_once __DIR__ . '/site/plugins/kirby3-staticache/index.php';
-    staticache(__DIR__ . '/static');
-    
-    echo (new Kirby)->render();
 ```
 
 ## Settings
