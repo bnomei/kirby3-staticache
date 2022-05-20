@@ -78,7 +78,12 @@ Add these lines before your kirby render method. Please note that using one of t
 **index.php**
 ```php
 <?php
-    $staticache = __DIR__ . '/static/' . $_SERVER['REQUEST_URI'] . '/index.html';
+    // load static cache file if it exists
+    $staticache = __DIR__ . '/static/';
+    if (!empty($_SERVER['REQUEST_URI'])) {
+        $staticache .= $_SERVER['REQUEST_URI'] . '/';
+    }
+    $staticache = 'index.html';
     if (file_exists($staticache)) {
         echo file_get_contents($staticache);
         die();
