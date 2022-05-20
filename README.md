@@ -73,7 +73,19 @@ You can use any of the following ways to make the static cache load. Using one o
 
 ### PHP
 
-Add these lines before your kirby render method. 
+If you installed the plugin with composer you can use a helper method called `staticache()`.
+
+**index.php**
+```php
+<?php    
+    require __DIR__ . '/kirby/bootstrap.php';
+
+    staticache(__DIR__ . '/static/');
+    
+    echo (new Kirby)->render();
+```
+
+Otherwise you need to add these lines before your kirby render method. 
 
 **index.php**
 ```php
