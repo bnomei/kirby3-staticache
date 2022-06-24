@@ -34,7 +34,7 @@ class StatiCache extends FileCache
         }
 
         // homepage defaults to root (maybe of language)
-        if ($key === 'home') {
+        if ($key === 'home' || page($key)->isHomePage()) {
             $key = '';
         }
 
@@ -56,7 +56,7 @@ class StatiCache extends FileCache
         $file = $this->file($key);
         $headers = headers_list();
         if (!empty($headers)) {
-            file_put_contents($file . '.json', json_encode($headers));
+            F::write($file . '.json', json_encode($headers));
         }
         return F::write($file, $value['html'] . $this->message());
     }
