@@ -3,6 +3,7 @@
 namespace Bnomei;
 
 use Kirby\Cache\FileCache;
+use Kirby\Cache\Value;
 use Kirby\Filesystem\F;
 use Kirby\Toolkit\Str;
 
@@ -46,9 +47,9 @@ class StatiCache extends FileCache
         return $this->root . '/' . $key . '/index.' . $extension;
     }
 
-    public function retrieve(string $key)
+    public function retrieve(string $key): ?Value
     {
-        return F::read($this->file($key));
+        return new Value(F::read($this->file($key)));
     }
 
     public function set(string $key, $value, int $minutes = 0): bool
