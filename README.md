@@ -1,3 +1,5 @@
+> ARCHIVED since v1.0.0 of official plugin was released on 1/17/23
+
 # Kirby3 Staticache
 
 ![Release](https://flat.badgen.net/packagist/v/bnomei/kirby3-staticache?color=ae81ff)
